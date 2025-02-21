@@ -19,6 +19,9 @@ add logic to have column headers of unique user id and assignment name. prompt u
 cpp gui? research gui writing  - fltk - begin building
 
 
+fix issue where Unique User ID and assignment name are not appearing in final map
+
+
 
 
 
@@ -50,6 +53,7 @@ auto GetUserIDs() {
         int comma = line.find(',');
 
         key = line.substr(comma + 1);
+        for (char& c : key) if (c == ',') c = ' ';
         value = line.substr(0, comma);
         userIds[key] = value;
 
@@ -76,23 +80,25 @@ auto GetKiraGradebook() {
         string key;
         string value;
         string grade;
-
-        string lastName;
+        int quote;
+        string name;
 
 
 
         int comma = line.find(',');
 
-        lastName = line.substr(0, comma);
+        name = line.substr(0, comma);
+        quote = name.find('\"');
+        name.erase(quote, 1);
+        quote = name.find('\"');
+        name.erase(quote, 1);
         
         line = line.substr(comma + 1);
-        //cout<<quote<<endl;
-        lastName = lastName.substr(lastName.find(' ') + 1);
-        int quote = lastName.length() - 1;
-        lastName = lastName.substr(0, quote);
+        
+        
         
 
-        key = lastName;
+        key = name;
 
         comma = line.find(',');
         line = line.substr(comma + 1);
@@ -124,18 +130,19 @@ auto getFinalCSV(map<string, string> m1, map<string, string>m2) {
     map<string, string>::iterator it1 = m1.begin();
     map<string, string>::iterator it2 = m2.begin();
     map<string, string> end;
-
-    while (it1 != m1.end()) {
-        map<string, string>::iterator it2 = m2.begin();
-        while(it1->first != it2->first && it2 != m2.end()) {
-            it2++;
+    string aN;
+    cout<<"What would you like to name the assignment?"<<endl;
+    getline(cin, aN);
+   for (const auto& [key2, value2]: m1) { 
+    for (const auto& [key1, value1] : m2){ 
+        if (value1 == "Unique User ID" && end.find(value1) != end.end()) {
+            end[value1] = aN;
+        } if (key1 == key2) {
+            end[value1] = value2;
         }
-        
-            end[it2->second] = it1->second;
-    
-        
-        ++it1;
+
     }
+}
 
     return end;
 }
