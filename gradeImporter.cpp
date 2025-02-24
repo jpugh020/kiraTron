@@ -19,7 +19,9 @@ Way to use cpp to control chrome? Could try to automate download
 
 cpp gui? research gui writing  - fltk - begin building
 
+Change Unique User ID to USER ID - should work with sorting and will still be readable by schoology.
 
+Fix out of range bug - need more edu on iterating with maps, maybe different data type to be more efficient?? 
 
 
 
