@@ -5,6 +5,7 @@
 #include <sstream>
 #include <regex>
 
+
 using namespace std;
 
 /* 
@@ -14,12 +15,12 @@ TO-DO LIST:
 Way to use cpp to control chrome? Could try to automate download
 
 
-add logic to have column headers of unique user id and assignment name. prompt user for assignment name / class period? 
+
 
 cpp gui? research gui writing  - fltk - begin building
 
 
-fix issue where Unique User ID and assignment name are not appearing in final map
+
 
 
 
@@ -53,7 +54,11 @@ auto GetUserIDs() {
         int comma = line.find(',');
 
         key = line.substr(comma + 1);
-        for (char& c : key) if (c == ',') c = ' ';
+        for (char& c : key) {
+            if (c == ',') {
+                c = ' ';
+            }
+        }
         value = line.substr(0, comma);
         userIds[key] = value;
 
@@ -66,7 +71,7 @@ auto GetUserIDs() {
 }
 
 auto GetKiraGradebook() {
-    ifstream file("Introduction to CS in Python (High School)_1st Period_7th Period_3rd Period_4th Period_5th period_6th Period_2025-02-20 (1).csv");
+    ifstream file("Introduction to CS in Python (High School)_1st Period_7th Period_3rd Period_4th Period_5th period_6th Period_2025-02-21.csv");
     map<string, string> points;
 
     if (!file.is_open()) {
@@ -133,11 +138,14 @@ auto getFinalCSV(map<string, string> m1, map<string, string>m2) {
     string aN;
     cout<<"What would you like to name the assignment?"<<endl;
     getline(cin, aN);
-   for (const auto& [key2, value2]: m1) { 
-    for (const auto& [key1, value1] : m2){ 
-        if (value1 == "Unique User ID" && end.find(value1) != end.end()) {
+   for ( auto& [key2, value2]: m1) { 
+    for ( auto& [key1, value1] : m2){ 
+        if (value1 == "Unique User ID" && end.find(value1) == end.end()) {
+            value1 = "UNique User ID";
             end[value1] = aN;
         } if (key1 == key2) {
+            end[value1] = value2;
+        } else if (key1.substr(key1.find(' ') + 1) == "ALTGILBERS" && key2.substr(key2.find(' ' + 1)) == "ALTGILBERS") {
             end[value1] = value2;
         }
 
@@ -176,7 +184,9 @@ for (const auto& [key, value] : finalCSV) {
 
 outputFile.open(period+".csv", ios::out);
 for (const auto& [key, value] : finalCSV) {
+    
     outputFile << key << ","<<value<<endl;
+        
 }
     outputFile.close();
     return 0;
