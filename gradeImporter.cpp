@@ -73,7 +73,7 @@ auto GetUserIDs() {
 }
 
 auto GetKiraGradebook() {
-    ifstream file("Introduction to CS in Python (High School)_1st Period_7th Period_3rd Period_4th Period_5th period_6th Period_2025-02-21.csv");
+    ifstream file("Introduction to CS in Python (High School)_1st Period_7th Period_3rd Period_4th Period_5th period_6th Period_2025-02-24.csv");
     map<string, string> points;
 
     if (!file.is_open()) {
@@ -143,11 +143,11 @@ auto getFinalCSV(map<string, string> m1, map<string, string>m2) {
    for ( auto& [key2, value2]: m1) { 
     for ( auto& [key1, value1] : m2){ 
         if (value1 == "Unique User ID" && end.find(value1) == end.end()) {
-            value1 = "UNique User ID";
+            value1 = "USER ID";
             end[value1] = aN;
         } if (key1 == key2) {
             end[value1] = value2;
-        } else if (key1.substr(key1.find(' ') + 1) == "ALTGILBERS" && key2.substr(key2.find(' ' + 1)) == "ALTGILBERS") {
+        } else if (key1.substr(key1.find(' ') + 1) == key2.substr(key2.find(' ' + 1))) {
             end[value1] = value2;
         }
 
