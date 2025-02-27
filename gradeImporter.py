@@ -8,7 +8,7 @@ user = (getpass.getuser())
 
 def getKiraGradebook():
     date = input("Please enter the date of a file you would like to import in the form of YYYY-MM-DD: ")
-    file = open(f"C:\\Users\\{user}\\Downloads\\Introduction to CS in Python (High School)_1st Period_7th Period_3rd Period_4th Period_5th period_6th Period_{date}.csv", "r")
+    file = open(f"C:\\Users\\{user}\\Downloads\\Introduction to CS in Python (High School)_1st Period_7th Period_3rd Period_4th Period_5th period_6th Period_{date}.csv", "r", encoding="utf-8-sig")
     nameIndex = 0
     lessonIndex = 0
     grades = {}
@@ -17,21 +17,27 @@ def getKiraGradebook():
             line = file.readline()
             if '"Name"' in line and '"Email"' in line:
                 cols = line.replace('"', '').split(',')
-                for i in range(len(cols) - 1):
-                    if cols[i] == 'Name' or cols[i].count('.', 0) == 2:
+                for i in range(len(cols)):
+                    if cols[i] == 'Name' or cols[i].count('.', 0) >= 1:
                         if cols[i] == 'Name':
                             nameIndex = i
-                        else:
+                        elif ' - ' in cols[i]:
                             lessonIndex = i
-            elif line != '':
-                line = line.replace('"', '').split(',')
-                if len(line[lessonIndex]) != 0:
+                            break
+                    if cols[i] == '\n':
+                        cols[i] = ''
+            elif line != '' and 'Name' not in line:
+                line = line.replace('"', '')
+                line = line.replace('\n', '')
+                line = line.split(',')
+                if len(line[lessonIndex]) != 0 and lessonIndex != 0:
                     grades[line[nameIndex]] = int(line[lessonIndex])
                 else:
-                    grades[line[nameIndex]] = 0
+                    grades[line[nameIndex]] = ""
             else:
                 break
     file.close()
+    os.remove(f"C:\\Users\\{user}\\Downloads\\Introduction to CS in Python (High School)_1st Period_7th Period_3rd Period_4th Period_5th period_6th Period_{date}.csv")
     return grades
     
     
